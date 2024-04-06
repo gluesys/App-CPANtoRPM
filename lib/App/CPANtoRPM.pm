@@ -2936,12 +2936,28 @@ sub _provides {
          chomp(@prov);
          foreach my $prov (@prov) {
             if ($prov =~ /^\s*(.*?)\s*=\s*(.*?)\s*$/) {
-               my($mod,$ver) = ($1,$2);
-               $package{'provides'}{$mod} = $ver;
+               my ($mod, $ver) = ($1, $2);
+
+               if ($$self{'epoch'} ne '')
+               {
+                  $package{'provides'}{$mod} = "%{epoch}:$ver";
+               }
+               else
+               {
+                  $package{'provides'}{$mod} = $ver;
+               }
             } else {
                $prov =~ s/\s*$//;
                $prov =~ s/^\s*//;
-               $package{'provides'}{$prov} = $package{'version'};
+
+               if ($$self{'epoch'} ne '')
+               {
+                  $package{'provides'}{$prov} = "%{epoch}:$package{'version'}";
+               }
+               else
+               {
+                  $package{'provides'}{$prov} = $package{'version'};
+               }
             }
          }
       }
@@ -2968,7 +2984,14 @@ sub _provides {
       }
 
       if (exists $package{'provides'}{$mod}) {
-         $package{'provides'}{$mod} = $ver;
+         if ($$self{'epoch'} ne '')
+         {
+            $package{'provides'}{$mod} = "%{epoch}:$ver";
+         }
+         else
+         {
+            $package{'provides'}{$mod} = $ver;
+         }
       }
    }
 
@@ -2982,7 +3005,14 @@ sub _provides {
 
       foreach my $type (qw(runtime test build)) {
          if (exists $package{'requires'}{$type}{$mod}) {
-            $package{'requires'}{$type}{$mod} = $ver;
+            if ($$self{'epoch'} ne '')
+            {
+               $package{'requires'}{$type}{$mod} = "%{epoch}:$ver";
+            }
+            else
+            {
+               $package{'requires'}{$type}{$mod} = $ver;
+            }
          }
       }
    }
@@ -2999,7 +3029,14 @@ sub _provides {
          ($mod,$ver) = ($feat,$package{'version'});
       }
 
-      $package{'provides'}{$mod} = $ver;
+      if ($$self{'epoch'} ne '')
+      {
+         $package{'provides'}{$mod} = "%{epoch}:$ver";
+      }
+      else
+      {
+         $package{'provides'}{$mod} = $ver;
+      }
    }
 }
 
@@ -4607,7 +4644,12 @@ rm -rf <_buildroot>
 <endif:man3_inst>
 
 %changelog
+
+<if:epoch>
+* <date> <packager> <version>-<release>:<epoch>
+<else:epoch>
 * <date> <packager> <version>-<release>
+<endif:epoch>
 - Generated using cpantorpm
 
 <eof>
