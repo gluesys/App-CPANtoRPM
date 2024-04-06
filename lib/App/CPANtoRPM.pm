@@ -1482,12 +1482,35 @@ sub _make_spec {
    #
    # A few more package values.
    #
+   (my $name = $package{'name'}) =~ s/-/::/g;
+
+   (my $url = $package{'cpandir'}) =~ s/^.+\///;
+   $url = "$url/$package{'dir'}/view";
+
+   if ($package{'files'}{'mainpod'}) {
+       $url = "$url/$package{'files'}{'mainpod'}[0]";
+   }
+   elsif ($package{'m_provides'}{$name}{file}) {
+       $url = "$url/$package{'m_provides'}{$name}{file}";
+   }
+
+   $url =~ s/$package{'version'}/\%{version}/;
 
    $package{'release'} = $$self{'release'};
    $package{'disttag'} = $$self{'disttag'};
    $package{'url'}     = ($package{'from'} eq 'url' ?
                           $package{'fromsrc'} :
-                          "http://search.cpan.org/dist/$package{name}/");
+                         "https://metacpan.org/release/$url");
+
+   if (ref($package{'m_resources'}{'bugtracker'}) eq 'HASH'
+         && $package{'m_resources'}{'bugtracker'}{'web'}) {
+      $package{'bugurl'} = $package{'m_resources'}{'bugtracker'}{'web'};
+   }
+   else
+   {
+      $package{'bugurl'} = "https://rt.cpan.org/Public/Dist/Display.html?Name=$package{'name'}";
+   }
+
    $package{'epoch'}   = $$self{'epoch'}  if ($$self{'epoch'} ne '');
    $package{'group'}   = $$self{'group'};
    $package{'license'} = ($package{'m_license'} ?
@@ -4492,7 +4515,7 @@ Summary:        <summary>
 License:        <license>
 Group:          <group>
 URL:            <url>
-BugURL:         <url>
+BugURL:         <bugurl>
 BuildArch:      <arch>
 Source0:        <name>-%{version}.tar.gz
 
