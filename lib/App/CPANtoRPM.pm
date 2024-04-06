@@ -1482,25 +1482,27 @@ sub _make_spec {
    #
    # A few more package values.
    #
+
+   $package{'release'} = $$self{'release'};
+   $package{'disttag'} = $$self{'disttag'};
+
    (my $name = $package{'name'}) =~ s/-/::/g;
 
    (my $url = $package{'cpandir'}) =~ s/^.+\///;
    $url = "$url/$package{'dir'}/view";
 
    if ($package{'files'}{'mainpod'}) {
-       $url = "$url/$package{'files'}{'mainpod'}[0]";
+      $url = "$url/$package{'files'}{'mainpod'}[0]";
    }
    elsif ($package{'m_provides'}{$name}{file}) {
-       $url = "$url/$package{'m_provides'}{$name}{file}";
+      $url = "$url/$package{'m_provides'}{$name}{file}";
    }
 
    $url =~ s/$package{'version'}/\%{version}/;
 
-   $package{'release'} = $$self{'release'};
-   $package{'disttag'} = $$self{'disttag'};
-   $package{'url'}     = ($package{'from'} eq 'url' ?
-                          $package{'fromsrc'} :
-                         "https://metacpan.org/release/$url");
+   $package{'url'} = ($package{'from'} eq 'url' ?
+                        $package{'fromsrc'} :
+                        "https://metacpan.org/release/$url");
 
    if (ref($package{'m_resources'}{'bugtracker'}) eq 'HASH'
          && $package{'m_resources'}{'bugtracker'}{'web'}) {
@@ -1516,10 +1518,11 @@ sub _make_spec {
    $package{'license'} = ($package{'m_license'} ?
                           $package{'m_license'} :
                           'GPL+ or Artistic');
+
    $package{'source'} =
      ($package{'from'} eq 'CPAN' ?
-      "http://search.cpan.org/authors/id/$package{cpandir}/$package{archive}" :
-      $package{'fromsrc'} );
+      "http://cpan.metacpan.org/authors/id/$package{cpandir}/$package{archive}" :
+      $package{'fromsrc'});
 
    foreach my $key (keys %{ $Macros{$$self{'macros'}} }) {
       my $val = $Macros{$$self{'macros'}}{$key};
