@@ -1521,7 +1521,7 @@ sub _make_spec {
 
    $package{'source'} =
      ($package{'from'} eq 'CPAN' ?
-      "http://cpan.metacpan.org/authors/id/$package{cpandir}/$package{archive}" :
+      "https://cpan.metacpan.org/authors/id/$package{cpandir}/$package{archive}" :
       $package{'fromsrc'});
 
    foreach my $key (keys %{ $Macros{$$self{'macros'}} }) {
@@ -4557,7 +4557,7 @@ Group:          <group>
 URL:            <url>
 BugURL:         <bugurl>
 BuildArch:      <arch>
-Source0:        <name>-%{version}.tar.gz
+Source0:        <source>
 
 #
 # Unfortunately, the automatic provides and requires do NOT always work (it
