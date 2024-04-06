@@ -3483,37 +3483,37 @@ sub _commands {
 
             if ($t eq 'perl') {
                push(@config_cmd,
-                    "--installdirs core");
+                    "\\\n	--installdirs core");
             } else {
                push(@config_cmd,
-                    "--installdirs $t");
+                    "\\\n	--installdirs $t");
             }
 
             push(@config_cmd,
-                 "--install_path script=%{_bindir}",
-                 "--install_path bin=%{_bindir}",
-                 "--install_path libdoc=%{_mandir}/man3",
-                 "--install_path bindoc=%{_mandir}/man1",
+                 "\\\n	--install_path script=%{_bindir}",
+                 "\\\n	--install_path bin=%{_bindir}",
+                 "\\\n	--install_path libdoc=%{_mandir}/man3",
+                 "\\\n	--install_path bindoc=%{_mandir}/man1",
                 );
 
          } else {
 
             if ($t eq 'perl') {
                push(@config_cmd,
-                    "INSTALLDIRS=perl",
-                    "INSTALLBIN=%{_bindir}",
-                    "INSTALLSCRIPT=%{_bindir}",
-                    "INSTALLMAN1DIR=%{_mandir}/man1",
-                    "INSTALLMAN3DIR=%{_mandir}/man3",
+                    "\\\n	INSTALLDIRS=perl",
+                    "\\\n	INSTALLBIN=%{_bindir}",
+                    "\\\n	INSTALLSCRIPT=%{_bindir}",
+                    "\\\n	INSTALLMAN1DIR=%{_mandir}/man1",
+                    "\\\n	INSTALLMAN3DIR=%{_mandir}/man3",
                    );
             } else {
                push(@config_cmd,
-                    "INSTALLDIRS=$t",
-                    "INSTALL${T}BIN=%{_bindir}",
-                    "INSTALL${T}SCRIPT=%{_bindir}",
-                    "INSTALL${T}MAN1DIR=%{_mandir}/man1",
-                    "INSTALL${T}MAN3DIR=%{_mandir}/man3",
-                    "INSTALLSCRIPT=%{_bindir}",       # necessary due to a bug
+                    "\\\n	INSTALLDIRS=$t",
+                    "\\\n	INSTALL${T}BIN=%{_bindir}",
+                    "\\\n	INSTALL${T}SCRIPT=%{_bindir}",
+                    "\\\n	INSTALL${T}MAN1DIR=%{_mandir}/man1",
+                    "\\\n	INSTALL${T}MAN3DIR=%{_mandir}/man3",
+                    "\\\n	INSTALLSCRIPT=%{_bindir}",       # necessary due to a bug
                    );
             }
          }
@@ -3530,63 +3530,84 @@ sub _commands {
          if ($type eq 'build') {
             if ($t eq 'perl') {
                push(@config_cmd,
-                    "--installdirs core",
-                    "--install_path arch=$d/lib/perl5/$VERS/$ARCH",
-                    "--install_path lib=$d/lib/perl5/$VERS",
-                    "--install_path script=$d/bin",
-                    "--install_path bin=$d/bin",
-                    "--install_path libdoc=$d/$MAN/man3",
-                    "--install_path bindoc=$d/$MAN/man1",
+                    "\\\n	--installdirs core",
+                    #"--install_path arch=$d/perl5/$VERS/$ARCH",
+                    #"--install_path lib=$d/perl5/$VERS",
+                    #"--install_path script=$d/bin",
+                    #"--install_path bin=$d/bin",
+                    #"--install_path libdoc=$d/$MAN/man3",
+                    #"--install_path bindoc=$d/$MAN/man1",
+                    "\\\n	--install_path arch=$d/perl5",
+                    "\\\n	--install_path lib=$d/perl5",
+                    "\\\n	--install_path script=/usr//bin",
+                    "\\\n	--install_path bin=/usr//bin",
+                    "\\\n	--install_path libdoc=$d/$MAN/man3",
+                    "\\\n	--install_path bindoc=$d/$MAN/man1",
                    );
 
             } else {
                push(@config_cmd,
-                    "--installdirs $t",
-                    "--install_path arch=$d/lib/perl5/${t}_perl/$VERS/$ARCH",
-                    "--install_path lib=$d/lib/perl5/${t}_perl/$VERS",
-                    "--install_path script=$d/bin",
-                    "--install_path bin=$d/bin",
-                    "--install_path libdoc=$d/$MAN/man3",
-                    "--install_path bindoc=$d/$MAN/man1",
+                    "\\\n	--installdirs $t",
+                    #"--install_path arch=$d/perl5/${t}_perl/$VERS/$ARCH",
+                    #"--install_path lib=$d/perl5/${t}_perl/$VERS",
+                    "\\\n	--install_path arch=$d/perl5/${t}_perl",
+                    "\\\n	--install_path lib=$d/perl5/${t}_perl",
+                    "\\\n	--install_path script=/usr/bin",
+                    "\\\n	--install_path bin=/usr/bin",
+                    "\\\n	--install_path libdoc=$d/$MAN/man3",
+                    "\\\n	--install_path bindoc=$d/$MAN/man1",
                    );
             }
 
          } else {
             if ($t eq 'perl') {
                push(@config_cmd,
-                    "INSTALLDIRS=perl",
-                    "PERLPREFIX=$d",
-                    "INSTALLARCHLIB=$d/lib/perl5/$VERS/$ARCH",
-                    "INSTALLPRIVLIB=$d/lib/perl5/$VERS",
-                    "INSTALLBIN=$d/bin",
-                    "INSTALLSCRIPT=$d/bin",
-                    "INSTALLMAN1DIR=$d/$MAN/man1",
-                    "INSTALLMAN3DIR=$d/$MAN/man3",
+                    "\\\n	INSTALLDIRS=perl",
+                    "\\\n	PERLPREFIX=$d",
+                    #"INSTALLARCHLIB=$d/perl5/$VERS/$ARCH",
+                    #"INSTALLPRIVLIB=$d/perl5/$VERS",
+                    "\\\n	INSTALLARCHLIB=$d/perl5",
+                    "\\\n	INSTALLPRIVLIB=$d/perl5",
+                    "\\\n	INSTALLBIN=/usr/bin",
+                    "\\\n	INSTALLSCRIPT=/usr/bin",
+                    "\\\n	INSTALLMAN1DIR=$d/$MAN/man1",
+                    "\\\n	INSTALLMAN3DIR=$d/$MAN/man3",
                    );
             } else {
                push(@config_cmd,
-                    "INSTALLDIRS=$t",
-                    "${T}PREFIX=$d",
-                    "INSTALL${T}ARCH=$d/lib/perl5/${t}_perl/$VERS/$ARCH",
-                    "INSTALL${T}LIB=$d/lib/perl5/${t}_perl/$VERS",
-                    "INSTALL${T}BIN=$d/bin",
-                    "INSTALL${T}SCRIPT=$d/bin",
-                    "INSTALL${T}MAN1DIR=$d/$MAN/man1",
-                    "INSTALL${T}MAN3DIR=$d/$MAN/man3",
-                    "INSTALLSCRIPT=$d/bin",            # necessary due to a bug
+                    "\\\n	INSTALLDIRS=$t",
+                    "\\\n	${T}PREFIX=$d",
+                    #"INSTALL${T}ARCH=$d/perl5/${t}_perl/$VERS/$ARCH",
+                    #"INSTALL${T}LIB=$d/perl5/${t}_perl/$VERS",
+                    #"INSTALL${T}BIN=$d/bin",
+                    #"INSTALL${T}SCRIPT=$d/bin",
+                    #"INSTALL${T}MAN1DIR=$d/$MAN/man1",
+                    #"INSTALL${T}MAN3DIR=$d/$MAN/man3",
+                    #"INSTALLSCRIPT=$d/bin",            # necessary due to a bug
+                    "\\\n	INSTALL${T}ARCH=$d/perl5/${t}_perl",
+                    "\\\n	INSTALL${T}LIB=$d/perl5/${t}_perl",
+                    "\\\n	INSTALL${T}BIN=/usr/bin",
+                    "\\\n	INSTALL${T}SCRIPT=/usr/bin",
+                    "\\\n	INSTALL${T}MAN1DIR=$d/$MAN/man1",
+                    "\\\n	INSTALL${T}MAN3DIR=$d/$MAN/man3",
+                    "\\\n	INSTALLSCRIPT=/usr/bin",            # necessary due to a bug
                    );
             }
          }
 
-         $package{'bin_dir'}  = "$d/bin";
+         #$package{'bin_dir'}  = "$d/bin";
+         $package{'bin_dir'}  = "/usr/bin";
          $package{'man1_dir'} = "$d/$MAN/man1";
          $package{'man3_dir'} = "$d/$MAN/man3";
          if      ($insttype eq 'perl') {
-            $package{'lib_dir'}  = "$d/lib/perl5/$VERS";
+            #$package{'lib_dir'}  = "$d/perl5/$VERS";
+            $package{'lib_dir'}  = "$d/perl5";
          } else {
-            $package{'lib_dir'}  = "$d/lib/perl5/${t}_perl/$VERS"
+            #$package{'lib_dir'}  = "$d/perl5/${t}_perl/$VERS"
+            $package{'lib_dir'}  = "$d/perl5/${t}_perl"
          }
-         $package{'arch_dir'} = "$package{lib_dir}/$ARCH";
+         #$package{'arch_dir'} = "$package{lib_dir}/$ARCH";
+         $package{'arch_dir'} = "$package{lib_dir}";
       }
    }
 
@@ -4596,7 +4617,9 @@ if [ -f pm_to_blib ]; then rm -f pm_to_blib; fi
 %build
 
 <config_cmd>
+
 <build_cmd>
+
 <list:post_build>
 
 <if:incl_tests>
